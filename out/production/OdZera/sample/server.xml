@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+
+<SERVER>
+    <PORT>444</PORT>
+    <NAME>DiceServer</NAME>
+</SERVER>
