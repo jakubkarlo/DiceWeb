@@ -46,16 +46,17 @@ public class Player extends Thread {
         return this.playerSocket;
     }
 
+    public ObjectInputStream getInputStream(){
+        return in;
+    }
+
+    public ObjectOutputStream  getOutputStream(){
+        return out;
+    }
+
     public void run(){
 
-        try {
-            int result = (int)in.readObject();
-            System.out.println(result);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+
     }
 
 

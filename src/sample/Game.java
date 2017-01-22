@@ -17,12 +17,13 @@ public class Game extends JFrame implements Runnable, ActionListener{
 
     private boolean myTurn;
     Player currentPlayer;
+    Player anotherPlayer;
 
     Game(Player player1, Player player2){
         currentPlayer = player1;
-
-        player1.start();
-        player2.start();
+        anotherPlayer = player2;
+//        player1.start();
+//        player2.start();
 
 
     }
@@ -43,16 +44,23 @@ public class Game extends JFrame implements Runnable, ActionListener{
 
 
 
-    public void isEnabled(boolean status) {
-        for (Component comp : this.getComponents()) {
-            comp.setEnabled(status);
-        }
-    }
+
 
     @Override
     public void run() {
 
-
+        try {
+            int result = (int)currentPlayer.in.readObject();
+            System.out.println(result);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            int result = (int)anotherPlayer.in.readObject();
+            System.out.println(result);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
 
     }

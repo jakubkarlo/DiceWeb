@@ -60,6 +60,8 @@ public class Server extends Thread {
                     player1.setOpponent(player2);
                     player2.setOpponent(player1);
                     Game game = new Game(player1, player2);
+                    Thread gameThread = new Thread(game);
+                    gameThread.start();
 
 
                 } catch (IOException e) {

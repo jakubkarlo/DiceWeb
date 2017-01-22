@@ -96,11 +96,7 @@ public class Client extends JFrame implements ActionListener {
 
     public void play(){
         while(true){
-            try {
-                System.out.println(in.readLine());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
         }
     }
 
@@ -125,6 +121,12 @@ public class Client extends JFrame implements ActionListener {
                 e.printStackTrace();
             }
             client.play();
+        }
+    }
+
+    public void isEnabled(boolean status) {
+        for (Component comp : this.getComponents()) {
+            comp.setEnabled(status);
         }
     }
 
