@@ -13,10 +13,18 @@ public class Player extends Thread {
     private int ID; // potrzebne do identyfikacji przez serwer
     private Socket playerSocket;
     Player opponent;
+    int score;
 
     ObjectInputStream in;
     ObjectOutputStream out;
 
+    public int getScore(){
+        return this.score;
+    }
+
+    public void setScore(int points){
+        this.score = points;
+    }
 
     public void setOpponent(Player opponent) {
         this.opponent = opponent;

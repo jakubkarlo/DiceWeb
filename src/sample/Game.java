@@ -49,20 +49,37 @@ public class Game extends JFrame implements Runnable, ActionListener{
     @Override
     public void run() {
 
-        try {
-            int result = (int)currentPlayer.in.readObject();
-            System.out.println(result);
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        try {
-            int result = (int)anotherPlayer.in.readObject();
-            System.out.println(result);
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        int result =0 ,secondResult=0;
 
 
+
+        while (currentPlayer.getScore() < 3 && anotherPlayer.getScore() < 3) {
+
+            try {
+                result = (int) currentPlayer.in.readObject();
+                System.out.println(result);
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            try {
+                secondResult = (int) anotherPlayer.in.readObject();
+                System.out.println(secondResult);
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            if (result > secondResult) {
+                System.out.println("Player " + currentPlayer.getID() + " won this round");
+                currentPlayer.setScore(currentPlayer.getScore()+1);
+            } else {
+                System.out.println("Player " + anotherPlayer.getID() + " won this round");
+                anotherPlayer.setScore(anotherPlayer.getScore()+1);
+            }
+
+        }
+        System.out.println("The game has ended");
+        System.out.println("Player " + currentPlayer.getID() +" score is: " + currentPlayer.getScore());
+        System.out.println("Player " + anotherPlayer.getID() +" score is: " + anotherPlayer.getScore());
     }
 
 
