@@ -22,14 +22,17 @@ public class Game extends JFrame implements Runnable {
 
 
     Game(Player player1, Player player2) {
+        System.out.println("Starting new room");
         this.player1 = player1;
         this.player2 = player2;
         this.currentPlayer = player1;
 
-
+        // first player can start now
         try {
             player1.getOutputStream().writeBoolean(true);
             player1.getOutputStream().flush();
+            player2.getOutputStream().writeBoolean(false);
+            player2.getOutputStream().flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -46,18 +49,6 @@ public class Game extends JFrame implements Runnable {
         player2Output.writeBoolean(true);
         player2Output.flush();
     }
-
-//    public int getResult(Player player) {
-//        if (player == player1) {
-//            try {
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            } catch (ClassNotFoundException e) {
-//                e.printStackTrace();
-//            }
-//            player1 = player1.opponent;
-//        }
-//    }
 
 
     @Override
@@ -84,7 +75,6 @@ public class Game extends JFrame implements Runnable {
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
-                // tu zmien flage na false i daj gracza + wyswietl wyniki nizej
                 if (result > secondResult) {
                     System.out.println("Player " + player1.getID() + " won this round");
                     player1.setScore(player1.getScore() + 1);

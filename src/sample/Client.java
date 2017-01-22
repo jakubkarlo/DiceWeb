@@ -21,6 +21,7 @@ public class Client extends JFrame implements ActionListener {
     Dice[] dices = new Dice[2];
     JLabel mainLabel;
     boolean myTurn;
+    JPanel draw;
 
 
 
@@ -38,7 +39,7 @@ public class Client extends JFrame implements ActionListener {
 
 
         setSize(300, 300);
-        setTitle("Dice Game made by Jakub Karło");
+        setTitle("Dice Game");
         setLocation(200, 100);
         setLayout(null);
         playButton = new JButton();
@@ -53,7 +54,7 @@ public class Client extends JFrame implements ActionListener {
         add(mainLabel);
 
 
-        JPanel draw = new JPanel(){
+        draw = new JPanel(){
             @Override
             protected void paintComponent(Graphics g){
                 super.paintComponent(g);
@@ -96,7 +97,8 @@ public class Client extends JFrame implements ActionListener {
         draw.setSize(300,300);
         draw.add(mainLabel);
         draw.add(playButton);
-        playButton.setVisible(false);
+        playButton.setVisible(true);
+        playButton.setEnabled(false);
         add(draw);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
@@ -112,14 +114,16 @@ public class Client extends JFrame implements ActionListener {
                 e.printStackTrace();
             }
             if(myTurn) {
-                playButton.setVisible(true);
-                mainLabel.setText("Now it's your turn");
+                playButton.setEnabled(true);
+                mainLabel.setText("Now you can throw dices");
+
             }
             else {
-                playButton.setVisible(false);
-                mainLabel.setText("Wait for your turn");
+                playButton.setEnabled(false);
+                mainLabel.setText("Please wait for your turn");
             }
         }
+
     }
 
     public int throwDice(){
