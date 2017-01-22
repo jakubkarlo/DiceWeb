@@ -1,22 +1,37 @@
 package sample;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.InetAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
  * Created by Jakub on 21.01.2017.
  */
-public class Player {
+public class Player extends Thread {
 
     private int ID; // potrzebne do identyfikacji przez serwer
     private Socket playerSocket;
+    Player opponent;
 
-    public Player(Socket socket, int playerNumber){
+    ObjectInputStream in;
+    ObjectOutputStream out;
+
+
+    public void setOpponent(Player opponent) {
+        this.opponent = opponent;
+    }
+
+    public Player(Socket socket, int playerNumber) {
         this.playerSocket = socket;
         this.ID = playerNumber;
+        try {
+            in = new ObjectInputStream(socket.getInputStream());
+            out = new ObjectOutputStream(socket.getOutputStream());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public int getID(){
@@ -31,23 +46,11 @@ public class Player {
         return this.playerSocket;
     }
 
-
-
-    public static void main(String[] args) throws IOException {
-
-        Socket socket = null;
-        int portNumber = 444; // tu trzeba wczytać jak na serwerze
-
-        try {
-            socket = new Socket(InetAddress.getLocalHost(), portNumber);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        PlayerService playerService = new PlayerService();
-        Thread server = new Thread(playerService);
-        server.start();
+    public void run(){
 
     }
+
+
+
 
 }

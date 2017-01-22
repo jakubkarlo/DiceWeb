@@ -12,8 +12,7 @@ import java.util.ArrayList;
  */
 public class Server extends Thread {
 
-    static ServerSocket serverSocket = null;
-    static Socket connectionSocket = null;
+    ServerSocket serverSocket = null;
     private int portNumber;
 
     static ArrayList<Player>playerList = new ArrayList<>();
@@ -40,7 +39,6 @@ public class Server extends Thread {
 
     }
 
-
     public static void main(String[] args) {
 
         Server server = new Server();
@@ -55,20 +53,16 @@ public class Server extends Thread {
             while(true){
 
                 try {
-                    connectionSocket = serverSocket.accept();
+                    Player player1 = new Player(serverSocket.accept(), ++playerCounter);
                     System.out.println("New player has connected");
-                    playerList.add(new Player(connectionSocket, ++playerCounter)); // id trzeba
-
-                    //wystartuj grę
-                    if(playerCounter%2 == 0) {
-                        System.out.println("Starting new room...");
-                        Game gamePlayer1 = new Game(playerList.get(0), true); // player1 always will start
-                        Game gamePlayer2 = new Game(playerList.get(1), false);
-                        Thread t1 = new Thread(gamePlayer1);
-                        Thread t2 = new Thread(gamePlayer2);
-                        t1.start();
-                        t2.start();
-                    }
+                    Player player2 = new Player(serverSocket.accept(), ++playerCounter);
+                    System.out.println("New player has connected");
+                    player1.setOpponent(player2);
+                    player2.setOpponent(player1);
+                    Game game = new Game();
+                    game.currentPlayer = player1;
+                    player1.start();
+                    player2.start();
 
                 } catch (IOException e) {
                     e.printStackTrace();
