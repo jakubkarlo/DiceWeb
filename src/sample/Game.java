@@ -18,12 +18,29 @@ public class Game extends JFrame implements Runnable, ActionListener{
     private boolean myTurn;
     Player currentPlayer;
 
-    Game(){
+    Game(Player player1, Player player2){
+        currentPlayer = player1;
 
-
+        player1.start();
+        player2.start();
 
 
     }
+
+
+//    public int getResult(Player player) {
+//        if (player == currentPlayer) {
+//            try {
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            } catch (ClassNotFoundException e) {
+//                e.printStackTrace();
+//            }
+//            currentPlayer = currentPlayer.opponent;
+//        }
+//    }
+
+
 
 
     public void isEnabled(boolean status) {

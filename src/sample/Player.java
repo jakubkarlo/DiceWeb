@@ -48,6 +48,14 @@ public class Player extends Thread {
 
     public void run(){
 
+        try {
+            int result = (int)in.readObject();
+            System.out.println(result);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 

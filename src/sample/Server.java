@@ -59,10 +59,8 @@ public class Server extends Thread {
                     System.out.println("New player has connected");
                     player1.setOpponent(player2);
                     player2.setOpponent(player1);
-                    Game game = new Game();
-                    game.currentPlayer = player1;
-                    player1.start();
-                    player2.start();
+                    Game game = new Game(player1, player2);
+
 
                 } catch (IOException e) {
                     e.printStackTrace();

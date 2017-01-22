@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.Socket;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by Jakub on 22.01.2017.
@@ -17,12 +18,19 @@ public class Client extends JFrame implements ActionListener {
     private ObjectInputStream in;
     private ObjectOutputStream out;
     JButton playButton;
+    Dice[] dices = new Dice[2];
 
 
     public Client(String serverAddress) throws IOException {
         socket = new Socket(serverAddress, 444);
         out = new ObjectOutputStream(socket.getOutputStream());
         in = new ObjectInputStream(socket.getInputStream());
+
+        // initialize dices
+        for(int i = 0; i <dices.length; i++){
+            Dice dice = new Dice();
+            dices[i] = dice;
+        }
 
 
         setSize(300, 300);
@@ -39,26 +47,40 @@ public class Client extends JFrame implements ActionListener {
         JPanel draw = new JPanel(){
             @Override
             protected void paintComponent(Graphics g){
-                int xRect = 40, yRect = 100;
-                g.setColor(Color.red);
-                g.fillRect(xRect, yRect, 100, 100);
-                g.setColor(Color.black);
-                g.fillOval(xRect + 5, yRect + 5, 30, 30);
-                g.fillOval(xRect + 65, yRect + 5, 30, 30);
-                g.fillOval(xRect + 35, yRect + 5, 30, 30);
-                g.fillOval(xRect + 5, yRect + 65, 30, 30);
-                g.fillOval(xRect + 65, yRect + 65, 30, 30);
-                g.fillOval(xRect + 35, yRect + 65, 30, 30);
-                xRect = 160;
-                g.setColor(Color.red);
-                g.fillRect(xRect, yRect, 100, 100);
-                g.setColor(Color.black);
-                g.fillOval(xRect + 5, yRect + 5, 30, 30);
-                g.fillOval(xRect + 65, yRect + 5, 30, 30);
-                g.fillOval(xRect + 35, yRect + 5, 30, 30);
-                g.fillOval(xRect + 5, yRect + 65, 30, 30);
-                g.fillOval(xRect + 65, yRect + 65, 30, 30);
-                g.fillOval(xRect + 35, yRect + 65, 30, 30);
+                super.paintComponent(g);
+                for (int i = 0, xRect = 40, yRect = 100; i < dices.length; i++, xRect += 120) {
+                    g.setColor(Color.red);
+                    g.fillRect(xRect, yRect, 100, 100);
+                    g.setColor(Color.black);
+                    if (dices[i].getNumber() == 1) {
+                        g.fillOval(xRect + 35, yRect + 35, 30, 30);
+                    } else if (dices[i].getNumber() == 2) {
+                        g.fillOval(xRect + 65, yRect + 5, 30, 30);
+                        g.fillOval(xRect + 5, yRect + 65, 30, 30);
+                    } else if (dices[i].getNumber() == 3) {
+                        g.fillOval(xRect + 65, yRect + 5, 30, 30);
+                        g.fillOval(xRect + 35, yRect + 35, 30, 30);
+                        g.fillOval(xRect + 5, yRect + 65, 30, 30);
+                    } else if (dices[i].getNumber() == 4) {
+                        g.fillOval(xRect + 5, yRect + 5, 30, 30);
+                        g.fillOval(xRect + 65, yRect + 5, 30, 30);
+                        g.fillOval(xRect + 5, yRect + 65, 30, 30);
+                        g.fillOval(xRect + 65, yRect + 65, 30, 30);
+                    } else if (dices[i].getNumber() == 5) {
+                        g.fillOval(xRect + 5, yRect + 5, 30, 30);
+                        g.fillOval(xRect + 65, yRect + 5, 30, 30);
+                        g.fillOval(xRect + 35, yRect + 35, 30, 30);
+                        g.fillOval(xRect + 5, yRect + 65, 30, 30);
+                        g.fillOval(xRect + 65, yRect + 65, 30, 30);
+                    } else if (dices[i].getNumber() == 6) {
+                        g.fillOval(xRect + 5, yRect + 5, 30, 30);
+                        g.fillOval(xRect + 65, yRect + 5, 30, 30);
+                        g.fillOval(xRect + 35, yRect + 5, 30, 30);
+                        g.fillOval(xRect + 5, yRect + 65, 30, 30);
+                        g.fillOval(xRect + 65, yRect + 65, 30, 30);
+                        g.fillOval(xRect + 35, yRect + 65, 30, 30);
+                    }
+                }
             }};
 
 
@@ -82,6 +104,17 @@ public class Client extends JFrame implements ActionListener {
         }
     }
 
+    public int throwDice(){
+        int points=0;
+        for (Dice currentDice : dices) {
+            int randomNum = ThreadLocalRandom.current().nextInt(1, 7);
+            currentDice.setNumber(randomNum);
+            points+= currentDice.getNumber();
+        }
+        return points;
+    }
+
+
     public static void main(String[] args){
         while (true) {
             Client client = null;
@@ -99,7 +132,14 @@ public class Client extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if (source == playButton){
-
+            int points = throwDice();
+            try {
+                out.writeObject(points);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
+        revalidate();
+        repaint();
     }
 }
