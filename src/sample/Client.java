@@ -19,12 +19,16 @@ public class Client extends JFrame implements ActionListener {
     private ObjectOutputStream out;
     JButton playButton;
     Dice[] dices = new Dice[2];
+    JLabel mainLabel;
+    boolean myTurn;
+
 
 
     public Client(String serverAddress) throws IOException {
         socket = new Socket(serverAddress, 444);
         out = new ObjectOutputStream(socket.getOutputStream());
         in = new ObjectInputStream(socket.getInputStream());
+
 
         // initialize dices
         for(int i = 0; i <dices.length; i++){
@@ -38,10 +42,15 @@ public class Client extends JFrame implements ActionListener {
         setLocation(200, 100);
         setLayout(null);
         playButton = new JButton();
-        playButton.setBounds(100, 100, 100, 40);
         playButton.setBorderPainted(true);
         playButton.setText("THROW!");
         playButton.addActionListener(this);
+
+        mainLabel = new JLabel();
+        mainLabel.setForeground(Color.BLACK);
+        mainLabel.setFont(new Font("SansSerif", Font.BOLD, 20));
+        mainLabel.setText("Please wait for opponent");
+        add(mainLabel);
 
 
         JPanel draw = new JPanel(){
@@ -85,18 +94,31 @@ public class Client extends JFrame implements ActionListener {
 
 
         draw.setSize(300,300);
+        draw.add(mainLabel);
         draw.add(playButton);
+        playButton.setVisible(false);
         add(draw);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
-
 
     }
 
 
     public void play(){
-        while(true){
-
+        while(this.isVisible()){
+            try {
+                myTurn = in.readBoolean();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if(myTurn) {
+                playButton.setVisible(true);
+                mainLabel.setText("Now it's your turn");
+            }
+            else {
+                playButton.setVisible(false);
+                mainLabel.setText("Wait for your turn");
+            }
         }
     }
 
